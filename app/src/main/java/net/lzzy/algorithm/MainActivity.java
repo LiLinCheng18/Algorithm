@@ -53,8 +53,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void directSort() {
-        //todo:直接选择排序的具体实现
-        //todo:for循环
+        int sum;                                   //创建局部变量
+        for (int i=0;i<items.length-1;i++){       //利用循环i一个个全部循环j对比大小
+            for(int j=0;j<items.length-1;j++){    //循环j，每循环一次i就循环items。length个j
+                if(items[j]>items[j+1]){          //判断数组第[j]个是否大于第[j+1]个数
+                    sum=items[j];                 //如果大于第[j+1]个数，就把它放入局部变量sum中
+                    items[j]=items[j+1];          //再把它放到自己的上一个数的位置
+                    items[j+1]=sum;               //最后还要把sum得到的数放到数组[j+1]的位置
+                }
+            }
+        }
     }
 
     private void generateItems() {
