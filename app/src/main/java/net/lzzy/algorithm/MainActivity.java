@@ -4,8 +4,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 
+import net.lzzy.algorithm.algorlib.DirectSort;
+import net.lzzy.algorithm.algorlib.HillRank;
+import net.lzzy.algorithm.algorlib.InsertSort;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Random;
 
@@ -25,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.activity_main_btn_generate).setOnClickListener(this);
         findViewById(R.id.activity_main_btn_sort).setOnClickListener(this);
         tvResult = findViewById(R.id.activity_main_tv_result);
+        Spinner spinner=findViewById(R.id.sp1);
     }
 
     @Override
@@ -35,8 +43,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 displayItems(edtItems);
                 break;
             case R.id.activity_main_btn_sort:
-                //directSort();
-                insertSort();
+                HillRank hillRank=new HillRank(items);  //希尔排序调用
+                hillRank.sort();
+
+//                DirectSort directSort=new DirectSort(items);  //直接选择排序调用
+//                directSort.sort();
+
+//                InsertSort insertSort=new InsertSort(items);      //直接插入排序调用
+//                insertSort.sort();
+
                 displayItems(tvResult);
                 break;
             default:
@@ -51,37 +66,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         display = display.substring(0, display.length() - 1);
         tv.setText(display);
-    }
-
-    //直接选择排序
-    private void directSort() {
-        int sum;                                   //创建局部变量
-        for (int i=0;i<items.length-1;i++){       //利用循环i一个个全部循环j对比大小
-            for(int j=0;j<items.length-1;j++){    //循环j，每循环一次i就循环items。length个j
-                if(items[j]>items[j+1]){          //判断数组第[j]个是否大于第[j+1]个数
-                    sum=items[j];                 //如果大于第[j+1]个数，就把它放入局部变量sum中
-                    items[j]=items[j+1];          //再把它放到自己的上一个数的位置
-                    items[j+1]=sum;               //最后还要把sum得到的数放到数组[j+1]的位置
-                }
-            }
-        }
-    }
-
-
-    //直接插入排序
-    private void insertSort(){
-        for(int i=1;i<items.length;i++){
-            int j=i-1;
-            if(items[j].compareTo(items[i])<0){
-                continue;
-            }
-            Integer tmp=items[i];
-            while (j>=0&&items[j].compareTo(tmp)>0){
-                items[j+1]=items[j];
-                j--;
-            }
-            items[j+1]=tmp;
-        }
     }
 
     private void generateItems() {
