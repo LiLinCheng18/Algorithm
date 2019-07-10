@@ -1,19 +1,21 @@
 package net.lzzy.algorithm;
 
+import android.content.Context;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import net.lzzy.algorithm.algorlib.DirectSort;
-import net.lzzy.algorithm.algorlib.HillRank;
-import net.lzzy.algorithm.algorlib.InsertSort;
+import net.lzzy.algorithm.chazhao.BaseSearch;
+import net.lzzy.algorithm.algorlib.BaseSort;
+//import net.lzzy.algorithm.algorlib.HillRank;
+import net.lzzy.algorithm.chazhao.SortChazhao;
+import net.lzzy.algorithm.algorlib.SortFactory;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Random;
 
 /**
@@ -24,6 +26,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private EditText edtItems;
     private TextView tvResult;
 
+    Spinner spinner;
+    Spinner spinnerchazhao;
+    Button buttonshengcheng;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,7 +37,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.activity_main_btn_generate).setOnClickListener(this);
         findViewById(R.id.activity_main_btn_sort).setOnClickListener(this);
         tvResult = findViewById(R.id.activity_main_tv_result);
-        Spinner spinner=findViewById(R.id.sp1);
+        spinner=findViewById(R.id.sp1);
+        spinnerchazhao=findViewById(R.id.spinnerchazhao);
+        buttonshengcheng=findViewById(R.id.btshengcheng);
     }
 
     @Override
@@ -43,17 +50,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 displayItems(edtItems);
                 break;
             case R.id.activity_main_btn_sort:
-                HillRank hillRank=new HillRank(items);  //希尔排序调用
-                hillRank.sort();
-
-//                DirectSort directSort=new DirectSort(items);  //直接选择排序调用
-//                directSort.sort();
-
-//                InsertSort insertSort=new InsertSort(items);      //直接插入排序调用
-//                insertSort.sort();
+                BaseSort sort=SortFactory.getInstance(spinner.getSelectedItemPosition(),items);
+                sort.sort();
+                String str="排序耗时："+sort.getRuntime()
+                        +"\n比较次数："+sort.getCompareCount()
+                        +"\n交换次数："+sort.getSwapCount()
+                        +"\n移动次数："+sort.getMovCount();
+                Dialog(MainActivity.this,str);
 
                 displayItems(tvResult);
                 break;
+            case R.id.btshengcheng:
+                BaseSearch search= SortChazhao.getInstance(spinner.getSelectedItemPosition(),items);
+                search.search(spinner.getSelectedItemPosition());
             default:
                 break;
         }
@@ -74,5 +83,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         for (int i = 0; i < items.length; i++) {
             items[i] = generator.nextInt(99);
         }
+    }
+    public static void Dialog(Context context, String msg){
+        new AlertDialog.Builder(context)
+                .setTitle("结果")
+                .setMessage(msg)
+                .setPositiveButton("确定",null)
+                .show();
     }
 }

@@ -10,5 +10,17 @@
         <item>
             希尔排序
         </item>
+        <item>
+            冒泡排序
+        </item>
+    </string-array>
+    <string-array name="Spient">
+        <item>
+            顺序查找
+        </item>
+        <item>
+            二分查找
+        </item>
+
     </string-array>
 </resources>

@@ -3,11 +3,10 @@ package net.lzzy.algorithm.algorlib;
 import android.util.Log;
 
 public class InsertSort<T extends Comparable<T>> extends BaseSort{
-
-    public InsertSort(Integer[] items) {
+    public InsertSort(T[] items) {
         super(items);
     }
-
+    //直接插入排序////////////////////////
     @Override
     public void sort() {
         long current = System.currentTimeMillis();
@@ -17,10 +16,12 @@ public class InsertSort<T extends Comparable<T>> extends BaseSort{
             if(items[j].compareTo(items[i])<0){
                 continue;
             }
-            Integer tmp=items[i];
+            compareCount++;
+            int tmp= (int) items[i];
             while (j>=0&&items[j].compareTo(tmp)>0){
                 items[j+1]=items[j];
                 j--;
+            swapCount++;
             }
             items[j+1]=tmp;
         }

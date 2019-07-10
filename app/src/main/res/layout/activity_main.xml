@@ -6,18 +6,17 @@
     android:orientation="vertical"
     android:layout_margin="16dp"
     tools:context=".MainActivity">
-
     <TextView
         android:id="@+id/activity_main_tv_result"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:layout_marginBottom="10dp"
         android:gravity="center"
         tools:text="1,2,3,4,5,6,7"/>
     <EditText
         android:id="@+id/activity_main_edt_items"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:inputType="text"
         android:hint="@string/activity_main_edt_items_hint"/>
     <LinearLayout
@@ -43,4 +42,32 @@
             android:layout_height="wrap_content"
             android:text="排序"/>
     </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp">
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+        <Spinner
+        android:layout_weight="2"
+        android:id="@+id/spinnerchazhao"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:entries="@array/Spient"
+        >
+    </Spinner>
+       <Button
+        android:id="@+id/btshengcheng"
+        android:layout_marginLeft="20dp"
+        android:layout_weight="1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="生成查找数组"
+        />
+    </LinearLayout>
+
 </LinearLayout>
