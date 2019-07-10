@@ -1,0 +1,328 @@
+Index: app/src/main/java/net/lzzy/algorithm/algorlib/InsertSort.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/net/lzzy/algorithm/algorlib/InsertSort.java	(date 1560591515310)
++++ app/src/main/java/net/lzzy/algorithm/algorlib/InsertSort.java	(date 1560591515310)
+@@ -0,0 +1,32 @@
++package net.lzzy.algorithm.algorlib;
++
++import android.util.Log;
++
++public class InsertSort<T extends Comparable<T>> extends BaseSort{
++
++    public InsertSort(Integer[] items) {
++        super(items);
++    }
++
++    @Override
++    public void sort() {
++        long current = System.currentTimeMillis();
++        Log.e("curent", current + "");
++        for(int i=1;i<items.length;i++){
++            int j=i-1;
++            if(items[j].compareTo(items[i])<0){
++                continue;
++            }
++            Integer tmp=items[i];
++            while (j>=0&&items[j].compareTo(tmp)>0){
++                items[j+1]=items[j];
++                j--;
++            }
++            items[j+1]=tmp;
++        }
++        long end = System.currentTimeMillis();
++        Log.e("end", end + "");
++        runtime = end - current;
++        Log.e("runtime", runtime + "");
++    }
++}
+Index: app/src/main/res/layout/activity_main.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/activity_main.xml	(revision 79e166636fb3844d04114d59ab2fd403ff566373)
++++ app/src/main/res/layout/activity_main.xml	(date 1560696111038)
+@@ -24,6 +24,12 @@
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:orientation="horizontal">
++        <Spinner
++            android:id="@+id/sp1"
++            android:entries="@array/Pient"
++            android:layout_width="wrap_content"
++            android:layout_height="wrap_content"
++            />
+         <Button
+             android:id="@+id/activity_main_btn_generate"
+             android:layout_width="0dp"
+Index: app/src/main/java/net/lzzy/algorithm/algorlib/HillRank.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/net/lzzy/algorithm/algorlib/HillRank.java	(date 1560757281983)
++++ app/src/main/java/net/lzzy/algorithm/algorlib/HillRank.java	(date 1560757281983)
+@@ -0,0 +1,29 @@
++package net.lzzy.algorithm.algorlib;
++
++public class HillRank<T extends Comparable<T>> extends BaseSort{
++    public HillRank(Integer[] items) {
++        super(items);
++    }
++
++    @Override
++    public void sort() {
++        int dk=items.length;       //定义dk做为步长
++        while (dk!=1){
++            dk = dk/2;             //刚开始选择的长度为一半
++            for(int k=0;k<=dk;k++){     //k是每个子序列的第一个元素的下标
++                for(int i=1;k+i*dk<items.length;i++){       //通过i改变倍数，确定下标
++                    for(int j=0;j<i;j++){                   //j是子序列中小于i的所以下标
++                        if(items[k+j*dk]>items[k+i*dk]){    //子序列进行插入排序
++                            int tmp=items[k+i*dk];
++                            for(int p=i;p>j;p--){
++                                items[k+p*dk] = items[k+(p-1)*dk];
++                                items[k+j*dk] = tmp;
++                            }
++                        }
++                    }
++                }
++            }
++        }
++
++    }
++}
+Index: app/src/main/java/net/lzzy/algorithm/algorlib/BaseSort.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/net/lzzy/algorithm/algorlib/BaseSort.java	(date 1560591515295)
++++ app/src/main/java/net/lzzy/algorithm/algorlib/BaseSort.java	(date 1560591515295)
+@@ -0,0 +1,58 @@
++package net.lzzy.algorithm.algorlib;
++
++public abstract class BaseSort <T extends Comparable<T>>{
++    //<T extends **********<T>>extends ******<T>
++    long runtime;//运行时长
++    int compareCount;//比较次数
++    int movCount;//移动次数
++    int swapCount;//交换次数
++    Integer[] items;
++
++     BaseSort(Integer items[]) {
++        this.items = items;
++    }
++     int compareTo(Object o) {
++        return 0;
++    }
++
++     long getRutime() {
++        return runtime;
++    }
++
++     int getCompareCount() {      //比较次数
++        return compareCount;
++    }
++
++     int getMovCount() {          //移动次数
++        return movCount;
++    }
++
++     int getSwapCount() {         //交换次数
++        return swapCount;
++    }
++
++     boolean compareTow(int a, int b) {       //两个数比较大小
++        compareCount++;
++        return a > b ? true : false;
++    }
++
++     void swap(int j, int kIndex) {           //两个数交换
++        swapCount++;
++        kIndex = items[j];
++        items[j] = items[j + 1];
++        items[j + 1] = kIndex;
++    }
++
++     void move() {
++        movCount++;
++    }
++
++     Integer[] returnResoult() {              //返回排序的结果
++        return items;
++    }
++
++     abstract void sort();
++
++
++
++}
+Index: app/src/main/java/net/lzzy/algorithm/algorlib/DirectSort.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/net/lzzy/algorithm/algorlib/DirectSort.java	(revision 79e166636fb3844d04114d59ab2fd403ff566373)
++++ app/src/main/java/net/lzzy/algorithm/algorlib/DirectSort.java	(date 1560697976006)
+@@ -1,25 +1,29 @@
+ package net.lzzy.algorithm.algorlib;
+ 
+-public class DirectSort {
++import android.util.Log;
+ 
+-    private Integer[] items;
+-    private  int compareCount;
++public class DirectSort<T extends Comparable<T>> extends BaseSort{
+ 
+-    DirectSort (Integer[] items){
+-        this.items = items;
+-        compareCount = 0;
++    public DirectSort(Integer[] items) {
++        super(items);
+     }
+ 
+-    boolean bigger(Integer a, Integer b){
+-        compareCount ++;
+-        return a.compareTo(b) > 0;
+-    }
+-
+-    public long getDuration(){
+-        return getDuration();
+-    }
+-
+-    public int getCompareCount(){
+-        return compareCount;
++    @Override
++    public void sort() {
++        //直接选择排序////////////////////////
++        long current = System.currentTimeMillis();
++        Log.e("curent", current + "");
++        int sum = 0;                                   //创建局部变量
++        for (int i = 0; i < items.length - 1; i++) {       //利用循环i一个个全部循环j对比大小
++            for (int j = 0; j < items.length - 1; j++) {
++                if (compareTow(items[j],items[j+1])) {//循环j，每循环一次i就循环items。length个j
++                    swap(j,sum);
++                }
++            }
++            long end = System.currentTimeMillis();
++            Log.e("end", end + "");
++            runtime = end - current;
++            Log.e("runtime", runtime + "");
++        }
+     }
+-}
++    }
+Index: app/src/main/java/net/lzzy/algorithm/MainActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/net/lzzy/algorithm/MainActivity.java	(revision 79e166636fb3844d04114d59ab2fd403ff566373)
++++ app/src/main/java/net/lzzy/algorithm/MainActivity.java	(date 1560697975974)
+@@ -4,8 +4,15 @@
+ import android.os.Bundle;
+ import android.view.View;
+ import android.widget.EditText;
++import android.widget.Spinner;
+ import android.widget.TextView;
+ 
++import net.lzzy.algorithm.algorlib.DirectSort;
++import net.lzzy.algorithm.algorlib.HillRank;
++import net.lzzy.algorithm.algorlib.InsertSort;
++
++import java.lang.reflect.Array;
++import java.util.ArrayList;
+ import java.util.Calendar;
+ import java.util.Random;
+ 
+@@ -25,6 +32,7 @@
+         findViewById(R.id.activity_main_btn_generate).setOnClickListener(this);
+         findViewById(R.id.activity_main_btn_sort).setOnClickListener(this);
+         tvResult = findViewById(R.id.activity_main_tv_result);
++        Spinner spinner=findViewById(R.id.sp1);
+     }
+ 
+     @Override
+@@ -35,8 +43,15 @@
+                 displayItems(edtItems);
+                 break;
+             case R.id.activity_main_btn_sort:
+-                //directSort();
+-                insertSort();
++                HillRank hillRank=new HillRank(items);  //希尔排序调用
++                hillRank.sort();
++
++//                DirectSort directSort=new DirectSort(items);  //直接选择排序调用
++//                directSort.sort();
++
++//                InsertSort insertSort=new InsertSort(items);      //直接插入排序调用
++//                insertSort.sort();
++
+                 displayItems(tvResult);
+                 break;
+             default:
+@@ -53,37 +68,6 @@
+         tv.setText(display);
+     }
+ 
+-    //直接选择排序
+-    private void directSort() {
+-        int sum;                                   //创建局部变量
+-        for (int i=0;i<items.length-1;i++){       //利用循环i一个个全部循环j对比大小
+-            for(int j=0;j<items.length-1;j++){    //循环j，每循环一次i就循环items。length个j
+-                if(items[j]>items[j+1]){          //判断数组第[j]个是否大于第[j+1]个数
+-                    sum=items[j];                 //如果大于第[j+1]个数，就把它放入局部变量sum中
+-                    items[j]=items[j+1];          //再把它放到自己的上一个数的位置
+-                    items[j+1]=sum;               //最后还要把sum得到的数放到数组[j+1]的位置
+-                }
+-            }
+-        }
+-    }
+-
+-
+-    //直接插入排序
+-    private void insertSort(){
+-        for(int i=1;i<items.length;i++){
+-            int j=i-1;
+-            if(items[j].compareTo(items[i])<0){
+-                continue;
+-            }
+-            Integer tmp=items[i];
+-            while (j>=0&&items[j].compareTo(tmp)>0){
+-                items[j+1]=items[j];
+-                j--;
+-            }
+-            items[j+1]=tmp;
+-        }
+-    }
+-
+     private void generateItems() {
+         items = new Integer[10];
+         Random generator = new Random();
+Index: app/src/main/res/values/aray.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/values/aray.xml	(date 1560696110993)
++++ app/src/main/res/values/aray.xml	(date 1560696110993)
+@@ -0,0 +1,14 @@
++<?xml version="1.0" encoding="utf-8"?>
++<resources>
++    <string-array name="Pient">
++        <item>
++            直接选择排序
++        </item>
++        <item>
++            直接插入排序
++        </item>
++        <item>
++            希尔排序
++        </item>
++    </string-array>
++</resources>
+\ No newline at end of file
